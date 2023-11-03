@@ -1,0 +1,9 @@
+0;lucas;l@gmail.com
+1;gabriel;g@gmail.com
+2;alek;a@gmail.com
+3;antonio;ant@gmail.com
+4;ana;ana@gmail.com
+5;Lanna;lanna@gmail.com
+6;maria;maria@gmail.com
+7;Asmodeus;deus@gmail.com
+8;arthur;arthur@gmail.com
