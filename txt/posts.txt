@@ -1,10 +1,14 @@
 0;Eu gosto de cuscuz;0;0;2023-07-07;1
-1;Eu gosto de comer;0;0;2023-10-11;4;t;46
-2;Eu gosto de andar;0;0;2023-01-25;3;#saude;46
-3;Eu gosto de viajar;0;0;2023-06-17;2;#mundo,#conhecer;46
-4;Eu sinto fome o tempo todo;0;0;2023-05-05;1
-6;Eu sou tarado, não consigo me aguentar!;0;0;2023-01-10;1;#saúde,#tratamento;41
-7;Se eu fosse um bicho, eu seria uma gazela!;0;0;2023-08-29;1;#animais,#aéreo;38
-8;Eu retirei minha vescula;0;0;2023-10-18;0
-9;Eu retirei meus pontos;0;0;2023-11-01;0;#alivio;50
-10;Eu sou old fashion;0;0;2023-02-10;5;#old_school,#good_vibes,#live;50
+1;Eu sinto fome o tempo todo;0;0;2023-05-05;1
+2;Eu retirei minha vescula;0;0;2023-10-18;0
+3;Eu retirei meus pontos;0;0;2023-11-01;0;#alivio,#recuperacao,#ubs;43
+4;Eu sou old fashion;0;0;2023-02-10;5;#old_school,#good_vibes,#live;42
+5;Eu gosto de andar;0;0;2023-01-25;3;#saúde;37
+6;Eu gosto de viajar;0;0;2023-06-17;2;#mundo,#conhecer;40
+7;Se eu fosse um bicho, eu seria uma gazela!;0;0;2023-08-29;1;#animais,#aéreo;37
+8;Eu sou tarado, não consigo me aguentar!;0;0;2023-01-10;1;#saúde,#tratamento;34
+9;Eu preciso tomar vitaminas;0;0;2023-04-04;3;#saúde,#bem_estar;28
+10;Pare de assistir tv aberta;0;0;2023-10-01;1;#saúde,#sanidade;57
+11;Cachorros são engraçados por natureza;0;0;2023-07-04;5;#animais,#humor;22
+12;Camaleão é um arco-íris ambulante;0;0;2023-11-03;6;#animais,#prisma;24
+13;A Antártida é o fim do mundo?;0;0;2023-11-03;6;#mundo,#gelo;43

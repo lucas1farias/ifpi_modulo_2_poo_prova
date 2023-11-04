@@ -21,4 +21,4 @@ npx ts-node app.ts
 ```
 txt
 ```
-#### Holds data updated everytime the algorithm is started and closed
+`Records data acquired during the algorithm run into text files and retrieves them on the algorithm start`

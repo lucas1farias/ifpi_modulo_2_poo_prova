@@ -1,5 +1,11 @@
 
 
-questão 9
-classe de mensagens
-ajustes que surgirem no caminho
+-> questão 9
+-> export class Messages {}
+-> criar um algoritmo que crie milhares de postagens
+-> this.getMostPopularHashtags() (add decremento após visualizar)
+-> Verificar se as funções de análise de input estão configuradas corretamente (=== undefined)
+-> Verificar os "===" no algoritmo
+-> Inserir os tratamentos nos métodos das classes
+
+-> Verificar se uma postagem é popular (vou ver se faço)

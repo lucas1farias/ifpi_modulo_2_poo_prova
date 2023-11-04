@@ -104,11 +104,11 @@ export class Postagem {
     }
 
     curtir(): void {
-        this.curtidas +=1
+        this.curtidas++
     }
 
     descurtir(): void {
-        this.curtidas -=1
+        this.curtidas--
     }
 
     ehPopular(): boolean {
@@ -141,17 +141,25 @@ export class PostagemAvancada extends Postagem {
         this._visualizacoesRestantes = newValue
     }
     
-    // Use the own instance to make the checkage, accessing its array of hastags
+    // Check if a certain advanced post has in its "hashtags" attrib. the hashtag passed
     adicionarHashtag(hashtag: string): void {
-        this.existeHashtag(hashtag) ? null : this.hashtags.push(hashtag)
+        if (this.existeHashtag(hashtag)) {
+            console.log(new Messages().msg.warn)
+            console.log(new Messages().msg.fail.hashtagExists)
+            return
+        } 
+        console.log(new Messages().msg.warn)
+        console.log(new Messages().msg.success.hashtagAdded)
+        this.hashtags.push(hashtag)
     }
 
     existeHashtag(hashtag: string): boolean {
         return this.hashtags.includes(hashtag) ? true : false
     }
-
+    
+    // For when a post is viewed (but not on all cases) (the post is not chosen and its view removed)
     decrementarVisualizacoes(): void {
-        this.visualizacoesRestantes = this._visualizacoesRestantes - 1
+        this.visualizacoesRestantes = this.visualizacoesRestantes - 1
     }
 }
 
@@ -174,7 +182,10 @@ export class RepositorioDePerfis {
         !this.consultar(perfil.id) ? this.perfis.push(perfil) : null
     }
     
-    // It is being asked to return "null", but I do not know how to do it
+    /*
+        It is being asked to return "null", but I do not know how to do it in a way professor wants
+        It will return undefined instead
+    */
     consultar(id: number): Perfil {
         let searchedProfile!: Perfil
         for (let i = 0; i < this.perfis.length; i++) {
@@ -185,7 +196,10 @@ export class RepositorioDePerfis {
         return searchedProfile
     }
     
-    // added later
+    /*
+        After each new profile added, this value will track the history of indexes record
+       "txt/last_id_profile.txt" file will make use of it
+    */
     updateId(): void {
         this.lastId++
     }
@@ -232,6 +246,10 @@ export class RepositorioDePostagens {
         return posts
     }
 
+    /*
+        After each new post added, this value will track the history of indexes record
+       "txt/last_id_post.txt" file will make use of it
+    */
     updateId() {
         this.lastId++
     }
@@ -410,6 +428,7 @@ export class App {
         this.mockProfile = new Perfil(-1, "Void", "void@gmail.com")
         this.mockPost = new Postagem(-1, "void", 0, 0, "01-01-01", this.mockProfile)
         this.mockAdvancedPost = new PostagemAvancada(-1, "void", 0, 0, "01-01-01", this.mockProfile, ["#void"], 0)
+        
         this.auto ? this.start() : null
     }
 
@@ -417,91 +436,6 @@ export class App {
         return this._redeSocial
     }
 
-    menu(): string {
-        return `
-        ========== APLICAÇÃO: REDE SOCIAL ==========
-        0. Sair
-        1. incluir Perfil
-        2. consultar Perfil
-        3. incluir Postagem
-        4. consultar Postagens
-        5. curtir
-        6. descurtir
-        7. decrementar visualizações
-        8. exibir postagens por perfil
-        9. exibir postagens por hashtag
-        
-        ===== CONSULTAS =====
-        10. Ver repositório de perfis
-        11. Ver repositório de postagens
-        `
-    }
-    
-    requestInput(sentence: string, empty: boolean=false): string {
-        console.log(sentence)
-        let data: string
-        empty ? data = this.input("") : data = this.input(">>> ")
-        return data
-    }
-
-    requestNumberInput(sentence: string, empty: boolean=false): number {
-        console.log(sentence)
-        let data: number
-        empty ? data = Number(this.input("")) : data = Number(this.input(">>> "))
-        return data
-    }
-
-    hitEnter(): void {
-        this.requestInput("\n>>> Pressione ENTER <<<", true)
-    }
-    
-    showProfileDatabase(): void {
-        console.log("\n[")
-        for(let i = 0; i < this.getProfileDatabaseSize(); i++) {
-            const p = this.redeSocial.repPerfis.perfis[i]
-            console.log(`    { id: ${p.id}, nome: ${p.nome}, email: ${p.email} },`)
-        }
-        console.log("]")
-    }
-
-    showPostsDatabase(): void {
-        console.log("\n[")
-        for(let i = 0; i < this.getPostsDatabaseSize(); i++) {
-            const p: Postagem = this.redeSocial.repPosts.postagens[i]
-            if (p instanceof Postagem && !(p instanceof PostagemAvancada)) {
-                // id texto curtidas descurtidas data perfil
-                console.log(`    { id: ${p.id}, txt: ${p.texto}, like: ${p.curtidas} deslike: ${p.descurtidas}, data: ${p.data}, { id: ${p.perfil.id}, nome: ${p.perfil.nome} }, },`)
-            }
-            if (p instanceof PostagemAvancada) {
-                console.log(`    { id: ${p.id}, txt: ${p.texto}, like: ${p.curtidas} deslike: ${p.descurtidas}, data: ${p.data}, { id: ${p.perfil.id}, nome: ${p.perfil.nome} }, hash: [${p.hashtags}], views: ${p.visualizacoesRestantes}, },`)
-            }  
-        }
-        console.log("]")
-    }
-
-    showSpecificPosts(arrayPosts: Postagem[]): void {
-        console.log("\n[")
-        for (let i = 0; i < arrayPosts.length; i++) {
-            const p: Postagem = arrayPosts[i]
-            if (p instanceof Postagem && !(p instanceof PostagemAvancada)) {
-                // id texto curtidas descurtidas data perfil
-                console.log(`    { id: ${p.id}, txt: ${p.texto}, like: ${p.curtidas} deslike: ${p.descurtidas}, data: ${p.data}, { id: ${p.perfil.id}, nome: ${p.perfil.nome} }, }`)
-            }
-            if (p instanceof PostagemAvancada) {
-                console.log(`    { id: ${p.id}, txt: ${p.texto}, like: ${p.curtidas} deslike: ${p.descurtidas}, data: ${p.data}, { id: ${p.perfil.id}, nome: ${p.perfil.nome} }, hash: [${p.hashtags}], views: ${p.visualizacoesRestantes}, }`)
-            }  
-        }
-        console.log("]")
-    }
-
-    getProfileDatabaseSize(): number {
-        return this.redeSocial.repPerfis.perfis.length
-    }
-
-    getPostsDatabaseSize(): number {
-        return this.redeSocial.repPosts.postagens.length
-    }
-    
     // Main
     start(): void {
         /*
@@ -524,7 +458,7 @@ export class App {
         console.clear()
         do {
             console.log(this.menu())
-            this.operation = this.requestInput("Digite o valor da operação")
+            this.operation = this.requestInput(new Messages().msg.inputs.askOperationValue)
             this.conditionals()
         } while(this.operation != "0")
         
@@ -549,72 +483,16 @@ export class App {
 
         // End
         this.hitEnter()
-        console.log("===== AVISO =====\nAplicação encerrada!")
+        console.log(new Messages().msg.warn)
+        console.log(new Messages().msg.success.appClosed)
     }
 
-    conditionals(): void {
-        switch(this.operation) {
-            case "0":
-                break
-            case "1":
-                console.log("===== OPERAÇÃO 1: INCLUSÃO DE PERFIL =====")
-                this.incluirPerfil()
-                break
-            case "2":
-                console.log("===== OPERAÇÃO 2: PROCURAR PERFIL =====")
-                this.consultarPerfil()
-                break
-            case "3":
-                console.log("===== OPERAÇÃO 3: INCLUSÃO DE POSTAGEM =====")
-                this.incluirPostagem()
-                break
-            case "4":
-                console.log("===== OPERAÇÃO 4: CONSULTA DE POSTAGEM =====")
-                this.consultarPostagem()
-                break
-            case "5":
-                console.log("===== OPERAÇÃO 5: CURTIR POSTAGEM =====")
-                this.curtir()
-                break
-            case "6":
-                console.log("===== OPERAÇÃO 6: DESCURTIR POSTAGEM =====")
-                this.descurtir()
-                break
-            case "7":
-                console.log("===== OPERAÇÃO 7: DECREMENTAR VIEWS =====")
-                this.decrementarViews()
-                break
-            case "8":
-                console.log("===== OPERAÇÃO 8: EXIBIR POSTAGENS POR PERFIL =====")
-                this.exibirPostagensPorPerfil()
-                break
-            case "9":
-                console.log("===== OPERAÇÃO 9: EXIBIR POSTAGENS POR HASHTAG =====")
-                this.exibirPostagensPorhashtag()
-                break
-            case "10":
-                console.log("===== OPERAÇÃO 10: VER BANCO DE PERFIS =====")
-                this.viewProfiles()
-                break
-            case "11":
-                console.log("===== OPERAÇÃO 11: VER BANCO DE POSTAGENS =====")
-                this.viewPosts()
-                break
-            default:
-                console.log("Opções permitidas: 1 a 11!")
-        }
+    retrieveProfileLastId(): void {
+        this.redeSocial.repPerfis.lastId = Number(this.profileLastId.read())
     }
 
-    viewProfiles(): void {
-        console.log("Perfis registrados", this.getProfileDatabaseSize())
-        this.showProfileDatabase()
-        this.hitEnter()
-    }
-
-    viewPosts(): void {
-        console.log("Postagens registradas", this.getPostsDatabaseSize())
-        this.showPostsDatabase()
-        this.hitEnter()
+    retrievePostLastId(): void {
+        this.redeSocial.repPosts.lastId = Number(this.postLastId.read())
     }
 
     // To be used before algorithm start
@@ -663,16 +541,65 @@ export class App {
         }
     }
 
+    menu(): string {
+        return `
+        ========== APLICAÇÃO: REDE SOCIAL ==========
+        0. Sair
+        1. incluir Perfil
+        2. consultar Perfil
+        3. incluir Postagem
+        4. consultar Postagens
+        5. curtir
+        6. descurtir
+        7. decrementar visualizações
+        8. exibir postagens por perfil
+        9. exibir postagens por hashtag
+        
+        ===== CONSULTAS =====
+        10. Ver repositório de perfis
+        11. Ver repositório de postagens
+        12. Postagens mais populares
+        13. Hashtags mais populares
+
+        ===== EDITAR =====
+        14. adicionar hashtag
+        `
+    }
+    
+    requestInput(sentence: string, empty: boolean=false): string {
+        console.log(sentence)
+        let data: string
+        empty ? data = this.input("") : data = this.input(">>> ")
+        return data
+    }
+
+    requestNumberInput(sentence: string, empty: boolean=false): number {
+        console.log(sentence)
+        let data: number
+        empty ? data = Number(this.input("")) : data = Number(this.input(">>> "))
+        return data
+    }
+
+    // Auxiliar
+    removeAdvancedPostsWithoutViews(): void {
+        for (let i = 0; i < this.redeSocial.repPosts.postagens.length; i++) {
+            const p: Postagem = this.redeSocial.repPosts.postagens[i]
+            p instanceof PostagemAvancada && p.visualizacoesRestantes == 0 
+            ?  this.redeSocial.repPosts.postagens.splice(i, 1)
+            : null
+        }
+    }
+    
+    recordProfileLastId(): void {
+        this.profileLastId.content = `${this.redeSocial.repPerfis.lastId}`
+        this.profileLastId.write()
+    }
+
     wipeOldProfileData(): void {
         this.profilesTxt.content = ""
         this.profilesTxt.write()
     }
 
-    wipeOldPostData(): void {
-        this.postsTxt.content = ""
-        this.postsTxt.write()
-    }
-    
     // Before algorithm ceases: update "new profile" content into its container file
     recordNewProfileData(): void {
         let row: string = ""
@@ -683,7 +610,17 @@ export class App {
             this.profilesTxt.append()
         }
     }
-    
+
+    recordPostsLastId(): void {
+        this.postLastId.content = `${this.redeSocial.repPosts.lastId}`
+        this.postLastId.write()
+    }
+
+    wipeOldPostData(): void {
+        this.postsTxt.content = ""
+        this.postsTxt.write()
+    }
+
     // Before algorithm ceases: update "new post" content into its container file
     recordNewPostData(): void {
         for (let i = 0; i < this.redeSocial.repPosts.postagens.length; i++) {
@@ -710,96 +647,94 @@ export class App {
         }
     }
 
-    // To be used at the cease of the algorithm
-    recordPostData(): void {
-        /*
-        Postagem
-            id: number
-            texto: string
-            curtidas: number
-            descurtidas: number
-            data: string
-            perfil: Perfil
-        
-            PostagemAvancada
-            id: number
-            texto: string
-            curtidas: number
-            descurtidas: number
-            data: string
-            perfil: Perfil,
-            hashtags: string[]
-            visualizacoesRestantes: number
-        */
-        let row: string = ""
-        for (let i = 0; i < this.redeSocial.repPosts.postagens.length; i++) {
-            const thread: Postagem = this.redeSocial.repPosts.postagens[i]
-            if (thread instanceof Postagem && !(thread instanceof PostagemAvancada)) {
-                row = `${thread.id};${thread.texto};${thread.curtidas};${thread.descurtidas};${thread.data};${thread.perfil.id}`
-            }
-        }
-        this.postsTxt.content = row
-        this.postsTxt.append()
-        /*
-        ===== Postagem =====
-        Tudo parece certo até chegar no atributo "perfil"
-        O atributo "perfil" não pode ser acessado diretamente, pois é um objeto, não um dado solto
-        Pelo que eu acho, a melhor opção é, ao invés de jogar o perfil, é jogado seu id
-        Quando os dados forem recuperados no inciar do algoritmo
-        Esse documento verificará o último índice, passando a função "consultar" de "RepositorioPerfis"
-        Isso se o resultado da consulta for != de undefined
-
-        ===== PostagemAvancada =====
-        A mesma coisa de postagem, com um adicional
-        Existem 2 atributos a mais: hashtags e visualizacoesRestantes
-        */
-    }
-
-    recordProfileLastId(): void {
-        this.profileLastId.content = `${this.redeSocial.repPerfis.lastId}`
-        this.profileLastId.write()
-    }
-
-    recordPostsLastId(): void {
-        this.postLastId.content = `${this.redeSocial.repPosts.lastId}`
-        this.postLastId.write()
-    }
-
-    retrieveProfileLastId(): void {
-        this.redeSocial.repPerfis.lastId = Number(this.profileLastId.read())
-    }
-
-    retrievePostLastId(): void {
-        this.redeSocial.repPosts.lastId = Number(this.postLastId.read())
-    }
-
-    // Treatment for date handling, not complete though
-    handleDate(date: string, separator: string): boolean {
-        let correct: number = 0
-        const dateArray: string[] = date.split(separator)
-        Number(dateArray[0]) <= new Date().getFullYear() ? correct++ : null
-        Number(dateArray[1]) <= 12 ? correct++ : null
-        Number(dateArray[2]) <= 31 ? correct++ : null
-        Number(dateArray[0]) <= 9 ? dateArray[0] = `0${dateArray[0]}` : null
-        Number(dateArray[1]) <= 9 ? dateArray[1] = `0${dateArray[1]}` : null
-        Number(dateArray[2]) <= 9 ? dateArray[0] = `0${dateArray[2]}` : null
-        return correct == 3 ? true : false
+    hitEnter(): void {
+        this.requestInput(new Messages().msg.inputs.pressEnter, true)
     }
     
+    // Cases
+    conditionals(): void {
+        switch(this.operation) {
+            case "1":
+                console.log(new Messages().msg.operations.includeProfile)
+                this.incluirPerfil()
+                break
+            case "2":
+                console.log(new Messages().msg.operations.searchProfile)
+                this.consultarPerfil()
+                break
+            case "3":
+                console.log(new Messages().msg.operations.includePost)
+                this.incluirPostagem()
+                break
+            case "4":
+                console.log(new Messages().msg.operations.queryPost)
+                this.consultarPostagem()
+                break
+            case "5":
+                console.log(new Messages().msg.operations.likePost)
+                this.curtir()
+                break
+            case "6":
+                console.log(new Messages().msg.operations.unlikePost)
+                this.descurtir()
+                break
+            case "7":
+                console.log(new Messages().msg.operations.lessView)
+                this.decrementarViews()
+                break
+            case "8":
+                console.log(new Messages().msg.operations.showPostsByProfile)
+                this.exibirPostagensPorPerfil()
+                break
+            case "9":
+                console.log(new Messages().msg.operations.showPostsByHashtag)
+                this.exibirPostagensPorhashtag()
+                break
+            case "10":
+                console.log(new Messages().msg.operations.showProfileRepository)
+                this.viewProfiles()
+                break
+            case "11":
+                console.log(new Messages().msg.operations.showPostsRepository)
+                this.viewPosts()
+                break
+            case "12":
+                console.log(new Messages().msg.operations.queryMostPopularPosts)
+                const popularPosts: Postagem[] = this.getMostPopularPosts()
+                console.log(popularPosts)
+                this.decrementarViewsAposExibir(popularPosts)
+                this.hitEnter()
+                break
+            case "13":
+                console.log(new Messages().msg.operations.queryMostPopularHashtags)
+                const mostPopularPosts: Postagem[][] = this.getMostPopularHashtags()
+                mostPopularPosts.forEach((i:Postagem[], pos) => {
+                    this.showSpecificPosts(mostPopularPosts[pos])
+                    this.decrementarViewsAposExibir(mostPopularPosts[pos])
+                })
+                this.hitEnter()
+                break
+            case "14":
+                this.addHashtag()
+                break
+            default:
+                console.log(new Messages().msg.fail.invalidOptionsMainSwitch)
+        }
+    }
+
     // Case 1
     incluirPerfil(): void {
-        const inputName: string = this.requestInput("Nome da pessoa:")
-        const inputEmail: string = this.requestInput("Email da pessoa:")
+        const inputName: string = this.requestInput(new Messages().msg.inputs.askPersonName)
+        const inputEmail: string = this.requestInput(new Messages().msg.inputs.askPersonEmail)
         const newProfile: Perfil = new Perfil(this.redeSocial.repPerfis.lastId, inputName, inputEmail)
         this.redeSocial.incluirPerfil(newProfile)
         this.redeSocial.repPerfis.updateId()
-        console.log("Perfil criado!")
         this.hitEnter()
     }
     
     // Case 2
     consultarPerfil(): void {
-        const profileId: number = this.requestNumberInput("Informe o id do perfil")
+        const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
         const query = this.redeSocial.consultarPerfil(profileId, "void", "void")
         console.log(query ? `{ id: ${query.id} nome: ${query.nome} email: ${query.email} }` : "{ }")
         this.hitEnter()
@@ -807,18 +742,18 @@ export class App {
     
     // Case 3
     incluirPostagem(): void {
-        const postType: string = this.requestInput("Informe o tipo de postagem:\n1. regular\n2. avançada")
+        const postType: string = this.requestInput(new Messages().msg.inputs.askPostType)
         
         // Controllable attributes
-        const text: string = this.requestInput("Texto da postagem")
+        const text: string = this.requestInput(new Messages().msg.inputs.askPostContent)
         let today: string
         
         do {
-            today = this.requestInput("Informe ano, mês e o dia da postagem (ex: 2023-02-20)")
+            today = this.requestInput(new Messages().msg.inputs.askDateAsTutorial)
         } while(!(this.handleDate(today, "-")))
         
         // Main attributes
-        const profileId: number = this.requestNumberInput("Id do perfil")
+        const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
         const profileExists: Perfil = this.redeSocial.repPerfis.consultar(profileId)
         
         if (profileExists) {
@@ -837,8 +772,8 @@ export class App {
             // Ambas precisam de um id vinculado, por isso o mesmo "profileExists" é usado
             else if (postType == "2") {
                 const profileHashtags: string[] = []
-                const views: number = this.requestNumberInput("Defina uma qtd. limite de views p/ a postagem")
-                const hashTagsAmount: number = this.requestNumberInput("Informe a qtd. de hashtags")
+                const views: number = this.requestNumberInput(new Messages().msg.inputs.askPostViewsRange)
+                const hashTagsAmount: number = this.requestNumberInput(new Messages().msg.inputs.askHashtagsAmount)
                 
                 for (let i = 0; i < hashTagsAmount; i++) {
                     let hashtag: string = this.requestInput(`Nome da ${i + 1}a hashtag`)
@@ -854,17 +789,30 @@ export class App {
                 this.redeSocial.repPosts.updateId()
             }
         }
-        console.log("Postagem criada!")
+
         this.hitEnter()
+    }
+
+    // Treatment for date handling, not complete though
+    handleDate(date: string, separator: string): boolean {
+        let correct: number = 0
+        const dateArray: string[] = date.split(separator)
+        Number(dateArray[0]) <= new Date().getFullYear() ? correct++ : null
+        Number(dateArray[1]) <= 12 ? correct++ : null
+        Number(dateArray[2]) <= 31 ? correct++ : null
+        Number(dateArray[0]) <= 9 ? dateArray[0] = `0${dateArray[0]}` : null
+        Number(dateArray[1]) <= 9 ? dateArray[1] = `0${dateArray[1]}` : null
+        Number(dateArray[2]) <= 9 ? dateArray[0] = `0${dateArray[2]}` : null
+        return correct == 3 ? true : false
     }
 
     // Case 4
     consultarPostagem(): void {
-        const postType: string = this.requestInput("Informe o tipo da postagem:\n1. regular\n2. avançada")
+        const postType: string = this.requestInput(new Messages().msg.inputs.askPostType)
         
         // Regular post
         if (postType === "1") {
-            const profileId: number = this.requestNumberInput("Informe o id do perfil dessa postagem")
+            const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
             const query: Postagem[] = this.redeSocial.consultarPostagens(
                 profileId, this.mockPost.texto, "void", this.mockProfile
             )
@@ -872,33 +820,32 @@ export class App {
         }
         // Advanced post
         else {
-            const hashtag: string = this.requestInput("Informe a hashtag dessa postagem")
+            const hashtag: string = this.requestInput(new Messages().msg.inputs.askHashtagContent)
             const query: Postagem[] = this.redeSocial.consultarPostagens(
                 this.mockProfile.id, this.mockPost.texto, hashtag, this.mockProfile
             )
             query ? this.showSpecificPosts(query) : `{ }`
         }
+        this.hitEnter()
     }
 
     // Case 5
     curtir(): void {
-        const postId: number = this.requestNumberInput("Informe o id da postagem")  
+        const postId: number = this.requestNumberInput(new Messages().msg.inputs.askPostId)  
         this.redeSocial.curtir(postId)
-        console.log("Postagem curtida!")
         this.hitEnter()
     }
 
     // Case 6
     descurtir(): void {
-        const postId: number = this.requestNumberInput("Informe o id da postagem")  
+        const postId: number = this.requestNumberInput(new Messages().msg.inputs.askPostId)  
         this.redeSocial.descurtir(postId)
-        console.log("Postagem descurtida!")
         this.hitEnter()
     }
 
     // Case 7
     decrementarViews(): void {
-        const searchType: string = this.requestInput("Informe sua forma de procura:\n1. id de perfil\n2. hashtag")
+        const searchType: string = this.requestInput(new Messages().msg.inputs.askSearchingMethod)
         let query: Postagem[]
         
         /*
@@ -908,26 +855,28 @@ export class App {
             at the end, the query will reduce the views from the advanced ones
         */
         if (searchType === "1") {
-            const profileId: number = this.requestNumberInput("Informe o id do perfil dessa postagem")
+            const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
             query = this.redeSocial.consultarPostagens(
                 profileId, this.mockPost.texto, "void", this.mockProfile
             )
         }
         else {
-            const hashtag: string = this.requestInput("Informe a hashtag dessa postagem")
+            const hashtag: string = this.requestInput(new Messages().msg.inputs.askHashtagContent)
             query = this.redeSocial.consultarPostagens(
                 this.mockProfile.id, this.mockPost.texto, hashtag, this.mockProfile
             )
         }
 
-        // Reduce views from the ones that are advanced posts befora showing the results
-        query.forEach(i => {
-            i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null
-        })
-
         // Show all posts found within this profile's id range
-        console.log("===== POSTAGENS ENCONTRADAS =====")
+        console.log(new Messages().msg.success.postsFound)
         query ? this.showSpecificPosts(query) : `{ }`
+
+        // Reduce views from the ones that are advanced posts after showing the results
+        this.decrementarViewsAposExibir(query)
+        // query.forEach(i => {
+        //     i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null
+        // })
+
         this.hitEnter()
     }
 
@@ -945,42 +894,304 @@ export class App {
 
     // Case 8
     exibirPostagensPorPerfil(): void {
-        const profileId: number = this.requestNumberInput("Informe o id do perfil dessa postagem")
+        const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
         const postsFound: Postagem[] = this.redeSocial.exibirPostagensPorPerfil(profileId)
         console.log(postsFound)
         // Decreasing views after results are displayed
-        postsFound.forEach(i => {i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null})
+        // postsFound.forEach(i => {i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null})
+        this.decrementarViewsAposExibir(postsFound)
         this.hitEnter()
     }
 
     // Case 9
     exibirPostagensPorhashtag(): void {
-        const hashtag: string = this.requestInput("Informe a hashtag")
+        const hashtag: string = this.requestInput(new Messages().msg.inputs.askHashtagContent)
         const postsFound: Postagem[] = this.redeSocial.exibirPostagensPorHashtag(hashtag)
         console.log(postsFound)
         // Decreasing views after results are displayed
-        postsFound.forEach(i => {i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null})
+        // postsFound.forEach(i => {i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null})
+        this.decrementarViewsAposExibir(postsFound)
         this.hitEnter()
     }
 
-    removeAdvancedPostsWithoutViews(): void {
-        for (let i = 0; i < this.redeSocial.repPosts.postagens.length; i++) {
-            const p: Postagem = this.redeSocial.repPosts.postagens[i]
-            p instanceof PostagemAvancada && p.visualizacoesRestantes == 0 
-            ?  this.redeSocial.repPosts.postagens.splice(i, 1)
-            : null
+    // Case 10
+    viewProfiles(): void {
+        console.log("Perfis registrados", this.getProfileDatabaseSize())
+        this.showProfileDatabase()
+        this.hitEnter()
+    }
+
+    showProfileDatabase(): void {
+        console.log("\n[")
+        for(let i = 0; i < this.getProfileDatabaseSize(); i++) {
+            const thisProfile = this.redeSocial.repPerfis.perfis[i]
+            console.log(thisProfile)
         }
+        console.log("]")
+    }
+    
+    // Case 11
+    viewPosts(): void {
+        console.log("Postagens registradas", this.getPostsDatabaseSize())
+        this.showPostsDatabase()
+        this.hitEnter()
+    }
+
+    showPostsDatabase(): void {
+        console.log("\n[")
+        for(let i = 0; i < this.getPostsDatabaseSize(); i++) {
+            const thisPost: Postagem = this.redeSocial.repPosts.postagens[i] 
+            console.log(thisPost)
+        }
+        console.log("]")
+    }
+
+    // Case 12
+    getMostPopularPosts(): Postagem[] {
+        const rankAmount: number = this.requestNumberInput(new Messages().msg.inputs.askPostAmountForRank)
+        
+        let advancedPosts: Postagem[] = this.redeSocial.repPosts.postagens.filter((i: Postagem) => {
+            if (i instanceof PostagemAvancada) {
+                return true
+            }
+            return false
+        })
+        
+        advancedPosts.sort((a: Postagem, b: Postagem) => {
+            if (a instanceof PostagemAvancada && b instanceof PostagemAvancada) {
+                return b.visualizacoesRestantes - a.visualizacoesRestantes
+            }
+            return 0
+        })
+        
+        // There is a slice function who does this loop's work, but I chose not to do it
+        let popularPosts: Postagem[] = []
+        for (let i = 0; i < rankAmount; i++) {
+            popularPosts.push(advancedPosts[i])
+        }
+
+        return popularPosts
+    }
+
+    // Case 13
+    getMostPopularHashtags(): PostagemAvancada[][] {
+        const rankAmount: number = this.requestNumberInput(new Messages().msg.inputs.askHashtagAmountForRank)
+        const hashtagsBoxNonUnique: string[] = this.getAdvancedPostsHashtags(this.getAdvancedPosts())
+        const hashtagsBox: Hashtag = new Hashtag(hashtagsBoxNonUnique)
+        const hashtagsBoxUnique: string[] = hashtagsBox.filterUniqueHashtags()
+        const hashtagsCountageRank: [string, number][] = hashtagsBox.sortAscendingOrder()
+        const rank: [string, number][] = []
+
+        const overallPopularHashtagPosts: PostagemAvancada[][] = []
+        // Put into "rank" the results based on the range the user provided
+        // rank = [["#saúde", 4], ["#animais", 3], ["#mundo", 2]]
+        for (let i = 0; i < rankAmount; i++) {
+            rank.push(hashtagsCountageRank[i])
+        }
+        for (let i = 0; i < rank.length; i++) {
+            const hashtag: string = rank[i][0]
+            // overallPopularHashtagPosts.push()
+            overallPopularHashtagPosts.push(this.redeSocial.exibirPostagensPorHashtag(hashtag))
+        }
+        return overallPopularHashtagPosts
+    }
+
+    // Auxiliar
+    getAdvancedPosts(): PostagemAvancada[] {
+        let postsFilter: Postagem[] = this.redeSocial.repPosts.postagens.filter((i: Postagem) => {
+            if (i instanceof PostagemAvancada) {
+                return true
+            }
+            return false
+        })
+        // This is done to avoid error ts(2322)
+        const advancedPosts: PostagemAvancada[] = []
+        postsFilter.forEach(i => {i instanceof PostagemAvancada ? advancedPosts.push(i) : null})
+        postsFilter = []
+        return advancedPosts
+    }
+    
+    // Auxiliar
+    getAdvancedPostsHashtags(arrayPosts: PostagemAvancada[]): string[] {
+        const arrayHashtags: string[] = []
+        for (let i = 0; i < arrayPosts.length; i++) {
+            // Add each hashtag [j] from each index of arrayPosts [i]
+            for (let j = 0; j < arrayPosts[i].hashtags.length; j++) {
+                arrayHashtags.push(arrayPosts[i].hashtags[j])
+            }
+        }
+        return arrayHashtags
+    }
+
+    showSpecificPosts(arrayPosts: Postagem[]): void {
+        console.log("\n[")
+        for (let i = 0; i < arrayPosts.length; i++) {
+            const thisPost: Postagem = arrayPosts[i]
+            console.log(thisPost)
+        }
+        console.log("]")
+    }
+
+    getProfileDatabaseSize(): number {
+        return this.redeSocial.repPerfis.perfis.length
+    }
+
+    getPostsDatabaseSize(): number {
+        return this.redeSocial.repPosts.postagens.length
+    }
+    
+    decrementarViewsAposExibir(array: Postagem[]) {
+        array.forEach(i => {
+            i instanceof PostagemAvancada ? this.redeSocial.decrementarVisualizacoes(i) : null
+        })
+    }
+
+    addHashtag(): void {
+        const profileId: number = this.requestNumberInput(new Messages().msg.inputs.askProfileId)
+        const postsFromThisProfile: Postagem[] = this.redeSocial.repPosts.consultar(profileId, this.mockAdvancedPost.hashtags[0])
+        
+        const idList: number[] = []
+        postsFromThisProfile.forEach((i: Postagem) => {i instanceof PostagemAvancada ? idList.push(i.id) : null})
+        
+        console.log(postsFromThisProfile)
+        console.log(new Messages().msg.tutorial.askWhichId, "\n", idList)
+        const advancedPostId: number = this.requestNumberInput(new Messages().msg.inputs.choosePostId)
+        
+        idList.forEach((i: number) => {
+            if (advancedPostId === i) {
+                const newHashtag: string = this.requestInput(new Messages().msg.inputs.askHashtagContent)
+                const newPost = this.redeSocial.repPosts.postagens[i]
+                if (newPost instanceof PostagemAvancada) {
+                    (<PostagemAvancada> newPost).adicionarHashtag(newHashtag)
+                }
+                console.log(newPost)
+            }
+        })
+        this.hitEnter()
     }
 }
 
-/* ========== QUESTÃO 8 ==========
-    Implemente as funcionalidades:
-    -> Exibir as postagens populares que ainda podem ser exibidas
-    -> Exibir as hashtags mais populares, ou seja, as que estão presentes em mais postagens
+export class Hashtag {
+    private _hashBox: string[]
+    private _uniqueHashBox: string[]
+    private _countageReport: [string, number][] = []
     
-    -> Uma possibilidade é refatorar toda a aplicação a classe para ter um array de classes Hashtag 
-    na classe PostagemAvançada, onde ao cadastrar uma postagem pela rede social, as hashtags sejam 
-    cadastradas e um contador de cada uma seja atualizado.
+    constructor(hashBox: string[]) {
+        this._hashBox = hashBox
+        this._uniqueHashBox = []
+        this._countageReport = []
+    }
+
+    get hashBox(): string[] {
+        return this._hashBox
+    }
+
+    set hashBox(newValue) {
+        this._hashBox = newValue
+    }
+
+    get uniqueHashBox(): string[] {
+        return this._uniqueHashBox
+    }
+
+    set uniqueHashBox(newValue) {
+        this._uniqueHashBox = newValue
+    }
+
+    get countageReport(): [string, number][] {
+        return this._countageReport
+    }
+
+    filterUniqueHashtags(): string[] {
+        this.uniqueHashBox = this.hashBox.filter((i: string, pos: number, array: string[]) => {
+            if (array.indexOf(i) === pos) {
+                return true
+            }
+        })
+        return this.uniqueHashBox
+    }
+
+    countEachHashtag(): [string, number][] {
+        const report: [string, number][] = [];
+      
+        this.uniqueHashBox.forEach((i, pos) => {
+            report[pos] = [i, 0]
+        })
     
-    -> funcionalidades na classe App além das solicitadas.
-*/
+        this.hashBox.forEach((i) => {
+            if (this.uniqueHashBox.includes(i)) {
+                report[this.uniqueHashBox.indexOf(i)][1]++
+            }
+        })
+        
+        return report
+    }
+    
+    sortAscendingOrder(): [string, number][] {
+        const hashtagsSortedAscending: [string, number][] = this.countEachHashtag().sort((i: [string, number], i2: [string, number]) => {
+            if (i2[1] < i[1]) {
+                return -1  
+            } else if (i2[1] > i[1]) {
+                return 1  
+            } else {
+                return 0   
+            }
+        })
+        return hashtagsSortedAscending
+    }
+}
+
+export class Messages {
+    msg
+
+    constructor() {
+        this.msg = {
+            warn: "\n===== AVISO =====",
+            operations: {
+                includeProfile: "===== OPERAÇÃO 1: INCLUSÃO DE PERFIL =====",
+                searchProfile: "===== OPERAÇÃO 2: PROCURAR PERFIL =====",
+                includePost: "===== OPERAÇÃO 3: INCLUSÃO DE POSTAGEM =====",
+                queryPost: "===== OPERAÇÃO 4: CONSULTA DE POSTAGEM =====",
+                likePost: "===== OPERAÇÃO 5: CURTIR POSTAGEM =====",
+                unlikePost: "===== OPERAÇÃO 6: DESCURTIR POSTAGEM =====",
+                lessView: "===== OPERAÇÃO 7: DECREMENTAR VIEWS =====",
+                showPostsByProfile: "===== OPERAÇÃO 8: EXIBIR POSTAGENS POR PERFIL =====",
+                showPostsByHashtag: "===== OPERAÇÃO 9: EXIBIR POSTAGENS POR HASHTAG =====",
+                showProfileRepository: "===== OPERAÇÃO 10: VER BANCO DE PERFIS =====",
+                showPostsRepository: "===== OPERAÇÃO 11: VER BANCO DE POSTAGENS =====",
+                queryMostPopularPosts: "===== OPERAÇÃO 12: CONSULTAR POSTS MAIS POPULARES ======",
+                queryMostPopularHashtags: "===== OPERAÇÃO 13: CONSULTAR HASHTAGS MAIS POPULARES =====",
+            },
+            success: {
+                appClosed: "Aplicação encerrada!\n",
+                postsFound: "===== POSTAGENS ENCONTRADAS =====",
+                hashtagAdded: "Hashtag adicionada!\n"
+            },
+            fail: {
+                invalidOptionsMainSwitch: "Opções permitidas: 1 a 11!\n",
+                hashtagExists: "Hashtag repetida detectada!\n"
+            },
+            inputs: {
+                pressEnter: "\n>>> Pressione ENTER <<<",
+                askOperationValue: "Digite o valor da operação",
+                askPersonName: "Nome da pessoa:",
+                askPersonEmail: "Email da pessoa:",
+                askProfileId: "Informe o id do perfil",
+                askPostType: "Informe o tipo de postagem:\n1. regular\n2. avançada",
+                askPostContent: "Texto da postagem",
+                askDateAsTutorial: "Informe ano, mês e o dia da postagem (ex: 2023-02-20)",
+                askPostViewsRange: "Defina uma qtd. limite de views p/ a postagem",
+                askHashtagsAmount: "Informe a qtd. de hashtags",
+                askHashtagContent: "Informe a hashtag dessa postagem",
+                askPostId: "Informe o id da postagem dessa postagem",
+                askSearchingMethod: "Informe sua forma de procura:\n1. id de perfil\n2. hashtag",
+                askPostAmountForRank: "Informe a qtd. de posts para fazer o rank",
+                askHashtagAmountForRank: "Informe a qtd. de hashtags para fazer o rank",
+                choosePostId: "Escolha e informe o id da postagem a receber nova hashtag",
+            },
+            tutorial: {
+                askWhichId: "\nEscolha entre os id aquele que deseja add uma hashtag: "
+            }
+        }
+    }
+}
