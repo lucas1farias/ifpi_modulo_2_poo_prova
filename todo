@@ -9,3 +9,6 @@
 -> Inserir os tratamentos nos métodos das classes
 
 -> Verificar se uma postagem é popular (vou ver se faço)
+
+-> Case 7 precisar ser repensado
+-> As ações de gerenciamento de arquivo feitas em "App", talvez possam ser transferidas para "File"

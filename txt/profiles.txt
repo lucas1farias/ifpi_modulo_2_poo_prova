@@ -7,3 +7,4 @@
 6;maria;maria@gmail.com
 7;Asmodeus;deus@gmail.com
 8;arthur;arthur@gmail.com
+9;Chico;chico@gmail.com

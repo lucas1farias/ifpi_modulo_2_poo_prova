@@ -1,21 +1,20 @@
 
 
-const msg: [object] = [
-    {}
-]
+import {
+    App, Perfil, Postagem, PostagemAvancada, RedeSocial, RepositorioDePerfis, RepositorioDePostagens
+} from "../cls/cls"
+import {Algorithm} from "../tests/app"
+import prompt from "prompt-sync"
+import {lucas, gabriel, antonio} from "../tests/perfis"
 
-/*
-    includeProfile: "===== OPERAÇÃO 1: INCLUSÃO DE PERFIL =====",
-    searchProfile: "===== OPERAÇÃO 2: PROCURAR PERFIL =====",
-    includePost: "===== OPERAÇÃO 3: INCLUSÃO DE POSTAGEM =====",
-    queryPost: "===== OPERAÇÃO 4: CONSULTA DE POSTAGEM =====",
-    likePost: "===== OPERAÇÃO 5: CURTIR POSTAGEM =====",
-    unlikePost: "===== OPERAÇÃO 6: DESCURTIR POSTAGEM =====",
-    lessView: "===== OPERAÇÃO 7: DECREMENTAR VIEWS =====",
-    showPostsByProfile: "===== OPERAÇÃO 8: EXIBIR POSTAGENS POR PERFIL =====",
-    showPostsByHashtag: "===== OPERAÇÃO 9: EXIBIR POSTAGENS POR HASHTAG =====",
-    showProfileRepository: "===== OPERAÇÃO 10: VER BANCO DE PERFIS =====",
-    showPostsRepository: "===== OPERAÇÃO 11: VER BANCO DE POSTAGENS =====",
-    queryMostPopularPosts: "===== OPERAÇÃO 12: CONSULTAR POSTS MAIS POPULARES ======",
-    invalidOptionsMainSwitch: "Opções permitidas: 1 a 11!"
-*/
+
+// Então porque o filter aqui não está me mostrando somente a postagem de id "1"?
+const profiles: Perfil[] = []
+let posts: Postagem[] = [
+    new Postagem(1, "Postagem A do Lucas", 2, 0, "30/10/23", lucas),
+    new Postagem(5, "Eu consegui uma monitoria no IFPI", 0, 0, "31/10/23", gabriel),
+    new Postagem(6, "Eu sempre levo lanche quando saio", 0, 0, "31/10/23", gabriel),
+    new Postagem(7, "Brasil é quase um continente", 0, 0, "31/10/2023", antonio)
+]
+const repProfiles: RepositorioDePerfis = new RepositorioDePerfis(profiles)
+const repPosts: RepositorioDePostagens = new RepositorioDePostagens(posts)

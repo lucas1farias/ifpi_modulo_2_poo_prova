@@ -1,14 +1,16 @@
 0;Eu gosto de cuscuz;0;0;2023-07-07;1
-1;Eu sinto fome o tempo todo;0;0;2023-05-05;1
+1;Eu sinto fome o tempo todo;8;0;2023-05-05;1
 2;Eu retirei minha vescula;0;0;2023-10-18;0
-3;Eu retirei meus pontos;0;0;2023-11-01;0;#alivio,#recuperacao,#ubs;43
+3;Eu retirei meus pontos;16;3;2023-11-01;0;#alivio,#recuperacao,#ubs;37
 4;Eu sou old fashion;0;0;2023-02-10;5;#old_school,#good_vibes,#live;42
-5;Eu gosto de andar;0;0;2023-01-25;3;#saúde;37
-6;Eu gosto de viajar;0;0;2023-06-17;2;#mundo,#conhecer;40
-7;Se eu fosse um bicho, eu seria uma gazela!;0;0;2023-08-29;1;#animais,#aéreo;37
-8;Eu sou tarado, não consigo me aguentar!;0;0;2023-01-10;1;#saúde,#tratamento;34
-9;Eu preciso tomar vitaminas;0;0;2023-04-04;3;#saúde,#bem_estar;28
-10;Pare de assistir tv aberta;0;0;2023-10-01;1;#saúde,#sanidade;57
-11;Cachorros são engraçados por natureza;0;0;2023-07-04;5;#animais,#humor;22
-12;Camaleão é um arco-íris ambulante;0;0;2023-11-03;6;#animais,#prisma;24
-13;A Antártida é o fim do mundo?;0;0;2023-11-03;6;#mundo,#gelo;43
+5;Eu gosto de andar;0;0;2023-01-25;3;#saude;31
+6;Eu gosto de viajar;0;0;2023-06-17;2;#mundo,#conhecer;38
+8;Eu sou tarado, não consigo me aguentar!;0;0;2023-01-10;1;#saude,#tratamento;25
+9;Eu preciso tomar vitaminas;0;0;2023-04-04;3;#saude,#bem_estar;22
+10;Pare de assistir tv aberta;0;0;2023-10-01;1;#saude,#sanidade;46
+11;Cachorros são engraçados por natureza;0;0;2023-07-04;5;#animais,#humor;19
+12;Camaleão é um arco-íris ambulante;0;0;2023-11-03;6;#animais,#prisma;21
+13;A Antártida é o fim do mundo?;0;0;2023-11-03;6;#mundo,#gelo;41
+14;Eu quero um pc gamer;0;0;2023-04-30;0
+15;Eu quero voltar a andar de bicicleta;0;0;2023-10-11;0;#exercicio,#ciclismo;40
+16;Esta fazendo muito calor;0;0;2023-02-13;5
