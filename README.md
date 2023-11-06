@@ -1,12 +1,16 @@
 # ifpi_modulo_2_poo_prova
 `My OOP subject exam this semester`
 
+### Git clone or download the repository
+`After downloading the project files, rename it or keep the name as you wish`
+
 ### Install dependencies listed at
 ```
 requirements.txt
 ```
+`PS.: read the content of the file and make sure dependencies must be installed on the terminal and at the project's root folder`
 
-### Running main algorithm
+### Run main algorithm
 step 1
 ```
 cd app

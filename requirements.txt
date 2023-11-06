@@ -4,7 +4,7 @@ npm install typescript ts-node --save-dev
 npm install fs-extra prompt-sync
 npm install --save-dev @types/fs-extra
 npm install --save @types/prompt-sync
-npx tsc --init
+npx tsc --init (if file does not exist)
 
 ===== tsconfig.json =====
 "allowImportingTsExtensions": true
