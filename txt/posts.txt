@@ -1,21 +1,21 @@
-0;Eu gosto de cuscuz;95160;37214;2023-07-07;1
-1;Eu sinto fome o tempo todo;9186;22221;2023-05-05;1
-2;Eu retirei minha vesicula;31905;80525;2023-10-18;0
-3;Eu retirei meus pontos;72285;41458;2023-11-01;0;#alivio,#recuperacao,#ubs;36
-4;Eu sou old fashion;5631;73411;2023-02-10;5;#old_school,#good_vibes,#live;41
-5;Eu gosto de andar;20630;8036;2023-01-25;3;#saude;26
-6;Eu gosto de viajar;52208;84149;2023-06-17;2;#mundo,#conhecer;37
-8;Eu sou tarado, não consigo me aguentar!;48683;40343;2023-01-10;1;#saude,#tratamento;21
-9;Eu preciso tomar vitaminas;42732;2327;2023-04-04;3;#saude,#bem_estar;17
-10;Pare de assistir TV aberta;46190;75764;2023-10-01;1;#saude,#sanidade;42
-11;Cachorros são engraçados por natureza;94576;14962;2023-07-04;5;#animais,#humor;18
-12;Camaleão é um arco-íris ambulante;2339;29906;2023-11-03;6;#animais,#prisma;21
-13;A Antártida é o fim do mundo?;63241;97801;2023-11-03;6;#mundo,#gelo;40
-14;Eu quero um pc gamer;41451;74015;2023-04-30;0
-15;Eu quero voltar a andar de bicicleta;55481;13816;2023-10-11;0;#exercicio,#ciclismo;38
-16;Meu filho nasceu;11286;97874;1992-07-16;0;#vida;49
-17;Meu filho gosta muito de mamar;9383;72737;1992-07-17;0;#amamentar;49
-18;Meu bebe sera um menino;69605;205;1992-01-10;0;#cha_de_bebe,#presentes,#felicidade,#bons_momentos;49
-19;Hoje eu no durmo;12122;70644;2023-08-02;5
-20;Eu sinto muita fome durante a madrugada;35500;1323;2023-04-14;2
-21;Finalmente comecou a chover;64597;62053;2023-01-20;5;#Teresina;80
+0;Eu gosto de cuscuz;31319;74141;2023-07-07;1
+1;Eu sinto fome o tempo todo;32600;29214;2023-05-05;1
+2;Eu retirei minha vesicula;38296;67545;2023-10-18;0
+3;Eu retirei meus pontos;60403;85086;2023-11-01;0;#alivio,#recuperacao,#ubs;36
+4;Eu sou old fashion;1977;95261;2023-02-10;5;#old_school,#good_vibes,#live;41
+5;Eu gosto de andar;33654;74098;2023-01-25;3;#saude;26
+6;Eu gosto de viajar;72729;34759;2023-06-17;2;#mundo,#conhecer;37
+8;Eu sou tarado, não consigo me aguentar!;61744;32001;2023-01-10;1;#saude,#tratamento;21
+9;Eu preciso tomar vitaminas;84173;41946;2023-04-04;3;#saude,#bem_estar;17
+10;Pare de assistir TV aberta;28998;90340;2023-10-01;1;#saude,#sanidade;42
+11;Cachorros são engraçados por natureza;54631;69756;2023-07-04;5;#animais,#humor;18
+12;Camaleão é um arco-íris ambulante;83563;66315;2023-11-03;6;#animais,#prisma;21
+13;A Antártida é o fim do mundo?;96379;3516;2023-11-03;6;#mundo,#gelo;40
+14;Eu quero um pc gamer;86992;46508;2023-04-30;0
+15;Eu quero voltar a andar de bicicleta;60585;78115;2023-10-11;0;#exercicio,#ciclismo;38
+16;Meu filho nasceu;19250;29870;1992-07-16;0;#vida;49
+17;Meu filho gosta muito de mamar;88513;42176;1992-07-17;0;#amamentar;49
+18;Meu bebe sera um menino;93989;37857;1992-01-10;0;#cha_de_bebe,#presentes,#felicidade,#bons_momentos;49
+19;Hoje eu no durmo;88054;92941;2023-08-02;5
+20;Eu sinto muita fome durante a madrugada;34091;12067;2023-04-14;2
+21;Finalmente comecou a chover;21872;98440;2023-01-20;5;#Teresina;80

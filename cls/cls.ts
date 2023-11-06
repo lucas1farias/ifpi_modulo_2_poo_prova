@@ -557,6 +557,9 @@ export class App {
 
     // Support classes
     calendar: Calendario
+
+    // Settings
+    private _triggerSimulatePostInteraction: boolean
  
     constructor(redeSocial: RedeSocial, auto: boolean=false) {
         this._redeSocial = redeSocial
@@ -571,12 +574,21 @@ export class App {
         this.mockProfile = new Perfil(-1, "Void", "void@gmail.com")
         this.mockPost = new Postagem(-1, "void", 0, 0, "01-01-01", this.mockProfile)
         this.mockAdvancedPost = new PostagemAvancada(-1, "void", 0, 0, "01-01-01", this.mockProfile, ["#void"], 0)
+        this._triggerSimulatePostInteraction = false
         
         this.auto ? this.iniciar() : null
     }
 
     get redeSocial(): RedeSocial {
         return this._redeSocial
+    }
+
+    get triggerSimulatePostInteraction(): boolean {
+        return this._triggerSimulatePostInteraction
+    }
+
+    set triggerSimulatePostInteraction(newValue) {
+        this._triggerSimulatePostInteraction = newValue
     }
 
     // Main
@@ -623,7 +635,7 @@ export class App {
         */
         this.gravarUltimoPostId()
         this.limparRepositorioPostagensDesatualizado()
-        this.redeSocial.repPosts.simularAtividadePostagem()
+        this.triggerSimulatePostInteraction ? this.redeSocial.repPosts.simularAtividadePostagem() : null
         this.anexarRepositorioPostagensAtualizado()
 
         // End
@@ -713,6 +725,9 @@ export class App {
         b. remover postagem
         c. editar postagem
         d. ver postagens (ano e mês)
+
+        ===== CONFIGURAÇÕES =====
+        01. Ativar simulação de atividade
         `
     }
     
@@ -864,17 +879,19 @@ export class App {
                 this.addHashtag()
                 break
             case "b":
-                console.log("===== OPERAÇÃO 15: REMOÇÃO DE POSTAGEM =====")
+                console.log(new Messages().msg.operations.postRemoval)
                 this.removerPostagem()
                 break
             case "c":
-                console.log("===== OPERAÇÃO 16: ALTERAÇÃO DE CONTEÚDO DE POSTAGEM =====")
+                console.log(new Messages().msg.operations.postContentEdit)
                 this.editarPostagem()
                 break
             case "d":
-                console.log("===== OPERAÇÃO 17 =====")
+                console.log(new Messages().msg.operations.postQueryComplete)
                 this.exibirPostagensAnoEspecifico()
                 break
+            case "01": 
+               this.habilitarPostagemInteracao()
         }
     }
     
@@ -1393,6 +1410,14 @@ export class App {
             : null
         }
     }
+
+    habilitarPostagemInteracao(): boolean {
+        console.log("===== CONFIGURAÇÕES =====")
+        console.log(`Simular atividade nas postagens: ${this.triggerSimulatePostInteraction ? "sim" : "não"}`)
+        const option: string = this.requisitarEntrada("Deseja ativar está funcionalidade?\n1. sim\n2. não")
+        option === "1" ? this.triggerSimulatePostInteraction = true : this.triggerSimulatePostInteraction = false
+        return this.triggerSimulatePostInteraction
+    }
 }
 
 export class Hashtag {
@@ -1532,7 +1557,10 @@ export class Messages {
                 showPostsRepository: "===== OPERAÇÃO 11: VER BANCO DE POSTAGENS =====",
                 queryMostPopularPosts: "===== OPERAÇÃO 12: CONSULTAR POSTS MAIS POPULARES ======",
                 queryMostPopularHashtags: "===== OPERAÇÃO 13: CONSULTAR HASHTAGS MAIS POPULARES =====",
-                postHashtagAppend: "===== OPERAÇÃO 14: ADIÇÃO DE HASHTAG EM POSTAGEM EXISTENTE ====="
+                postHashtagAppend: "===== OPERAÇÃO 14: ADIÇÃO DE HASHTAG EM POSTAGEM EXISTENTE =====",
+                postRemoval: "===== OPERAÇÃO 15: REMOÇÃO DE POSTAGEM =====",
+                postContentEdit: "===== OPERAÇÃO 16: ALTERAÇÃO DE CONTEÚDO DE POSTAGEM =====",
+                postQueryComplete: "===== OPERAÇÃO 17: PESQUISAR POSTAGENS (MÊS E ANO) ====="
             },
             success: {
                 appClosed: "Aplicação encerrada!\n",
