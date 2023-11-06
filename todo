@@ -12,3 +12,14 @@
 
 -> Case 7 precisar ser repensado
 -> As ações de gerenciamento de arquivo feitas em "App", talvez possam ser transferidas para "File"
+
+-> "App.getMostPopularPosts" está implementada incorretamente
+-> Eu tenho que pegar as postagens mais populares usando aquele cálculo da função "ehPopular"
+-> Se for uma postagem comum, inserir ela na lista das populares
+-> Fazer o mesmo com postagens avançadas se elas ainda tiverem views restantes
+
+-> (questão 8) c. 4 funcionalidades na classe App além das solicitadas. 
+    . addHashtag (ok)
+    . removerPostagensAvancadasSemViews (ok)
+    . removerPostagem (não feito)
+    . ordenarPostagensPorDataCriacao (não feito)
