@@ -611,11 +611,13 @@ export class App {
         this.recuperarRepositorioPostagens()
         
         // Start
-        console.clear()
+        
+        console.log('\n\n\n\n\n')
         do {
             console.log(this.menu())
             this.operation = this.requisitarEntrada(new Messages().msg.inputs.askOperationValue)
             this.condicionais()
+            console.clear()
         } while(this.operation != "0")
         
         // The wipe must happen before any change on
@@ -725,6 +727,7 @@ export class App {
         b. remover postagem
         c. editar postagem
         d. ver postagens (ano e mês)
+        e. resetar repositório de postagens
 
         ===== CONFIGURAÇÕES =====
         01. Ativar simulação de atividade
@@ -890,6 +893,9 @@ export class App {
                 console.log(new Messages().msg.operations.postQueryComplete)
                 this.exibirPostagensAnoEspecifico()
                 break
+            case "e":
+                this.apagarConteudoRepositorio()
+                break
             case "01": 
                this.habilitarPostagemInteracao()
         }
@@ -981,7 +987,7 @@ export class App {
 
                 // Hashtags being added progressively on the loop (one input for each index)
                 for (let i = 0; i < hashTagsAmount; i++) {
-                    let hashtag: string = this.requisitarEntrada(`Nome da ${i + 1}a hashtag`)
+                    let hashtag: string = this.requisitarEntrada(`Nome da ${i + 1}a hashtag (não incluir #)`)
                     profileHashtags.push("#" + hashtag)
                 }
 
@@ -1418,6 +1424,13 @@ export class App {
         option === "1" ? this.triggerSimulatePostInteraction = true : this.triggerSimulatePostInteraction = false
         return this.triggerSimulatePostInteraction
     }
+
+    apagarConteudoRepositorio(): void {
+        this.postsTxt.content = ""
+        this.postsTxt.write()
+        console.log(new Messages().msg.success.postsRepositoryErased)
+        this.teclarEnter()
+    }
 }
 
 export class Hashtag {
@@ -1570,7 +1583,8 @@ export class Messages {
                 profileCreated: "Perfil criado!\n",
                 postCreated: "Postagem criada!\n",
                 postRemoved: "Postagem removida!\n",
-                postContentChanged: "Conteúdo da postagem alterada!\n"
+                postContentChanged: "Conteúdo da postagem alterada!\n",
+                postsRepositoryErased: "Conteúdo do repositório das postagens limpado!\n"
             },
             fail: {
                 invalidOptionsMainSwitch: "Opções permitidas: 1 a 11!\n",
@@ -1593,6 +1607,7 @@ export class Messages {
                 askPostViewsRange: "Defina uma qtd. limite de views p/ a postagem",
                 askHashtagsAmount: "Informe a qtd. de hashtags",
                 askHashtagContent: "Informe a hashtag dessa postagem (incluir #)",
+                askHashtagContentNoHash: "Informe a hashtag dessa postagem (não incluir #)",
                 askPostId: "Informe o id da postagem dessa postagem",
                 askSearchingMethod: "Informe sua forma de procura:\n1. id de perfil\n2. hashtag",
                 askHashtagAmountForRank: "Informe a qtd. de hashtags para fazer o rank",

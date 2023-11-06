@@ -3,7 +3,6 @@
 import {
     App, Perfil, Postagem, RedeSocial, RepositorioDePerfis, RepositorioDePostagens
 } from "../cls/cls"
-import {Algorithm} from "../tests/app"
 import prompt from "prompt-sync"
 
 function main() {
