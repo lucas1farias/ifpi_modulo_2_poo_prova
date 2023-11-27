@@ -3,7 +3,6 @@
 import {
     App, Perfil, Postagem, RedeSocial, RepositorioDePerfis, RepositorioDePostagens
 } from "../cls/cls"
-import prompt from "prompt-sync"
 
 function main() {
     const profiles: Perfil[] = []

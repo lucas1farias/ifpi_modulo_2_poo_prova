@@ -549,6 +549,7 @@ export class App {
     postsTxt: File
     profileLastId: File
     postLastId: File
+    settingsOptionA: File
 
     // Content for empty parameters
     mockProfile: Perfil
@@ -559,22 +560,29 @@ export class App {
     calendar: Calendario
 
     // Settings
-    private _triggerSimulatePostInteraction: boolean
+    private _triggerOptionA: number
  
     constructor(redeSocial: RedeSocial, auto: boolean=false) {
         this._redeSocial = redeSocial
         this.auto = auto
         this.input = prompt()
         this.operation = ""
+        
+        // Text files
         this.profilesTxt = new File("../txt/profiles.txt", "")
         this.postsTxt = new File("../txt/posts.txt", "")
         this.profileLastId = new File("../txt/last_id_profile.txt", "")
         this.postLastId = new File("../txt/last_id_post.txt", "")
+        this.settingsOptionA = new File("../txt/settingsOptionA.txt", "")
+
         this.calendar = new Calendario()
+        
         this.mockProfile = new Perfil(-1, "Void", "void@gmail.com")
         this.mockPost = new Postagem(-1, "void", 0, 0, "01-01-01", this.mockProfile)
         this.mockAdvancedPost = new PostagemAvancada(-1, "void", 0, 0, "01-01-01", this.mockProfile, ["#void"], 0)
-        this._triggerSimulatePostInteraction = false
+        
+        // This is only apropriate to settings menu options, otherwise, it is better to create functions
+        this._triggerOptionA = Number(this.settingsOptionA.read())
         
         this.auto ? this.iniciar() : null
     }
@@ -583,35 +591,26 @@ export class App {
         return this._redeSocial
     }
 
-    get triggerSimulatePostInteraction(): boolean {
-        return this._triggerSimulatePostInteraction
+    get triggerOptionA(): number {
+        return this._triggerOptionA
     }
 
-    set triggerSimulatePostInteraction(newValue) {
-        this._triggerSimulatePostInteraction = newValue
+    set triggerOptionA(newValue) {
+        this._triggerOptionA = newValue
     }
 
     // Main
     iniciar(): void {
-        /* ========== PROFILE AND POSTS REPOSITORIES LAST INDEXES ==========
-        Single values placed into: ["txt/last_id_profile.txt", "txt/last_id_post.txt"]
-        Store into the document containers the last index value from each repository
-        This way, the next object created (profile or post) will have its id based on these values
-        */
+
+        // docs/app.txt/iniciar/copy_file_values
         this.recuperarUltimoIndiceDePerfil()
         this.recuperarUltimoIndiceDePostagem()
 
-        /* ===== PROFILE AND POSTS CONTENTE MANAGEMENT =====
-        Retrieve content from ["txt/posts.txt", "txt/profiles.txt"] before the algorithm starts
-        The content from both will be placed as instances from each repository
-        Each line from each document is converted to an instance and appended to the arrays of instances
-        This will, there will be no data loss, because history has always been retrieved
-        */
+        // docs/app.txt/iniciar/translate_and_copy_from_file_content_to_virtual_array
         this.recuperarRepositorioPerfis()
         this.recuperarRepositorioPostagens()
         
         // Start
-        
         console.log('\n\n\n\n\n')
         do {
             console.log(this.menu())
@@ -637,7 +636,7 @@ export class App {
         */
         this.gravarUltimoPostId()
         this.limparRepositorioPostagensDesatualizado()
-        this.triggerSimulatePostInteraction ? this.redeSocial.repPosts.simularAtividadePostagem() : null
+        this.triggerOptionA != 0 ? this.redeSocial.repPosts.simularAtividadePostagem() : null
         this.anexarRepositorioPostagensAtualizado()
 
         // End
@@ -747,10 +746,20 @@ export class App {
         empty ? data = Number(this.input("")) : data = Number(this.input(">>> "))
         return data
     }
+
+    gravarUltimoValorConfigA(newValue: string): void {
+        this.settingsOptionA.content = newValue 
+        this.settingsOptionA.write()
+    }
     
     gravarUltimoPerfilId(): void {
         this.profileLastId.content = `${this.redeSocial.repPerfis.lastId}`
         this.profileLastId.write()
+    }
+
+    gravarUltimoPostId(): void {
+        this.postLastId.content = `${this.redeSocial.repPosts.lastId}`
+        this.postLastId.write()
     }
 
     limparRepositorioPerfisDesatualizado(): void {
@@ -767,11 +776,6 @@ export class App {
             this.profilesTxt.content = row + '\n'
             this.profilesTxt.append()
         }
-    }
-
-    gravarUltimoPostId(): void {
-        this.postLastId.content = `${this.redeSocial.repPosts.lastId}`
-        this.postLastId.write()
     }
 
     limparRepositorioPostagensDesatualizado(): void {
@@ -1016,12 +1020,13 @@ export class App {
 
     // Case 4: [App.consultarPostagens] -> [RedeSocial.consultarPostagens] -> [RepositorioPostagens.consultarPostagens]
     consultarPostagem(): void {
+        // Type 1 (query by profile id)    ...    Type 2 (query by hashtag)
         let postType: string
         do {
             postType = this.requisitarEntrada(new Messages().msg.inputs.askPostType)
         } while (postType !== "1" && postType !== "2")
         
-        // Regular post: focus on profile id and receives posts from this profile
+        // Regular post: receives posts if the "post.profile.id" === profile id input
         if (postType === "1") {
             const profileId: number = this.requisitarEntradaNumero(new Messages().msg.inputs.askProfileId)
             const query: Postagem[] = (<RedeSocial> this.redeSocial).consultarPostagens(
@@ -1029,7 +1034,7 @@ export class App {
             )
             query ? this.redeSocial.repPosts.exibirPostagens(query) : `{ }`
         }
-        // Advanced post: focus on hashtag and receives posts with this hashtag
+        // Advanced post: receives posts if the "post.hashtags" has hashtag input included 
         else {
             const hashtag: string = this.requisitarEntrada(new Messages().msg.inputs.askHashtagContent)
             const query: Postagem[] = (<RedeSocial> this.redeSocial).consultarPostagens(
@@ -1281,12 +1286,15 @@ export class App {
         idList.forEach((i: number) => {
             if (advancedPostId === i) {
                 const newPost = this.redeSocial.repPosts.consultarUnico(advancedPostId)
+                console.log(new Messages().msg.tutorial.chooseAdvancedPost)
+                this.teclarEnter()
                 console.log(newPost)
                 const newHashtag: string = this.requisitarEntrada(new Messages().msg.inputs.askHashtagContent)
                 
                 if (newPost instanceof PostagemAvancada) {
                     newPost.adicionarHashtag(newHashtag)
                     console.log(newPost)
+                    this.teclarEnter()
                     return
                 }
                 console.log(new Messages().msg.warn)
@@ -1417,12 +1425,26 @@ export class App {
         }
     }
 
-    habilitarPostagemInteracao(): boolean {
+    habilitarPostagemInteracao(): void {
         console.log("===== CONFIGURAÇÕES =====")
-        console.log(`Simular atividade nas postagens: ${this.triggerSimulatePostInteraction ? "sim" : "não"}`)
-        const option: string = this.requisitarEntrada("Deseja ativar está funcionalidade?\n1. sim\n2. não")
-        option === "1" ? this.triggerSimulatePostInteraction = true : this.triggerSimulatePostInteraction = false
-        return this.triggerSimulatePostInteraction
+        console.log(`1. Simular atividade nas postagens: ${this._triggerOptionA != 0 ? "ATIVADA" : "DESATIVADA"}`)
+        
+        let option: string
+        do {
+            option = this.requisitarEntrada("Deseja ativar está funcionalidade?\n0. desativar\n1. ativar\n2. sair")
+            if (option === "2") {
+                break
+            }
+        } while (option !== "0" && option !== "1" && option !== "2")
+        
+        if (option === "0") {
+            this.gravarUltimoValorConfigA(option)
+            this.triggerOptionA = 0
+        }
+        else if (option === "1") {
+            this.gravarUltimoValorConfigA(option)
+            this.triggerOptionA = 1
+        } 
     }
 
     apagarConteudoRepositorio(): void {
@@ -1615,7 +1637,8 @@ export class Messages {
                 choosePostId: "Escolha e informe o id da postagem a receber nova hashtag",
             },
             tutorial: {
-                askWhichId: "\nEscolha entre os id aquele que deseja add uma hashtag: "
+                askWhichId: "\nEscolha entre os id aquele que deseja add uma hashtag: ",
+                chooseAdvancedPost: "OBS: Observe as postagens e escolha a que for avançada"
             }
         }
     }

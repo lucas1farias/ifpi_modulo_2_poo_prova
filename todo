@@ -1,3 +1,33 @@
 
 
--> Ver onde aplicar a funcionalidade de decrementar views (depois de testar todos os castings)
+-> Revisão e refatoração
+    . Varrer código em busca de encapsular ações dentros dos métodos que possam evitar repetição de código
+    . Varrer métodos e buscar documentar suas ações para melhor entendimento de seus objetivos
+    . Varrer métodos relacionados com diminuição de views (posts avançados) e verificar se há mais contextos de aplicação
+    . "RedeSocial.consultarPostagens" (remover parâmetros que considero desnecessário)
+
+-> Legibilidade e manutenção de código
+    . Quebrar "cls.ts" em partes menores
+
+-> Melhorar o sistema de configurações
+    . ARQUIVO: [settings.txt]
+    . Para cada configuração, criar um arquivo com valor único (normalmente booleano)
+    . ACESSO? usuários LOGADOS ([auth.txt] com valor !== -1) podendo habilitar e desabilitar configurações
+    . Ao sair do algoritmo: a última configuração aplicada (mudança de valor) naquela config. deve ser gravado em arquivo
+    . Ao sair do algoritmo: gravar últimos valores para que novas configurações não sejam esquecida pelo algoritmo
+
+-> Adicionar um sistema de login
+    . ARQUIVO: [perfil.txt] incluir o atributo "senha" na forma criptografada
+    . ARQUIVO: [auth.txt] gerencia quem está ativo nesta sessão (documento limpado a cada saída do algoritmo)
+    . ARQUIVO: [auth.txt] se no iniciar do algoritmo, for escolhido anônimo, inserir -1 neste arquivo
+    . Adicionar o atributo "senha" na criação de perfil
+    . Ao criar um perfil: aquela senha deve ser submetida a criptografia 
+    . Ao criar um perfil: Guardar 2 linhas (ou na mesma linha) (id do perfil, senha criptografada)
+    . Ao iniciar o algoritmo: perguntar se o usuário quer logar ou entrar como anônimo
+    . Ao editar uma postagem: requisitar a senha (impedir de editar caso senha errada)
+
+-> Restrição de conteúdo
+    . Ações baseadas no valor inserido no documento [auth.txt] devendo ser !== -1
+    . Se -1: usuário anônimo
+    . Restrições
+        -> Não pode ver as configurações (2 versões de "App.this.menu") 

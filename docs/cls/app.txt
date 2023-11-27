@@ -1,0 +1,16 @@
+
+
+iniciar() {
+    copy_file_values
+    
+        Single values placed into: ["txt/last_id_profile.txt", "txt/last_id_post.txt"]
+        Store into the document containers the last index value from each repository
+        This way, the next object created (profile or post) will have its id based on these values
+        
+    translate_and_copy_from_file_content_to_virtual_array
+
+        Retrieve content from ["txt/posts.txt", "txt/profiles.txt"] before the algorithm starts
+        The content from both will be placed as instances from each repository
+        Each line from each document is converted to an instance and appended to the arrays of instances
+        This will, there will be no data loss, because history has always been retrieved
+}
